@@ -5,12 +5,13 @@ import shutil
 
 # Пути
 BASE = Path(__file__).parent
-OUTPUT = BASE / "output"
-QR_DIR = OUTPUT / "assets/qrcodes"
-CSS_DIR = OUTPUT / "assets/css"
-IMG_DIR = OUTPUT / "assets/img"
+OUTPUT = BASE / "docs"
+
+QR_DIR = OUTPUT / "qrcodes"
+CSS_DIR = OUTPUT / "css"
+IMG_DIR = OUTPUT / "img"
 LOGO_SRC = BASE / "ProspectBoxing2.png"
-LOGO = "assets/img/ProspectBoxing2.png"
+LOGO = "img/ProspectBoxing2.png"
 
 # Создаём директории
 QR_DIR.mkdir(parents=True, exist_ok=True)
@@ -56,7 +57,7 @@ html_template = """<!DOCTYPE html>
   <meta charset="UTF-8">
   <title>{name} — Prospect Boxing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="docs/css/style.css">
 </head>
 <body>
   <div class="container">
