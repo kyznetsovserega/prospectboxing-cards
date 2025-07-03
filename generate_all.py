@@ -6,26 +6,38 @@ import shutil
 # Пути
 BASE = Path(__file__).parent
 OUTPUT = BASE / "docs"
-
 QR_DIR = OUTPUT / "qrcodes"
 CSS_DIR = OUTPUT / "css"
 IMG_DIR = OUTPUT / "img"
+ICONS_SRC = BASE / "icons_svg"
+ICONS_DST = OUTPUT / "icons"
 LOGO_SRC = BASE / "logo_prospect.png"
 LOGO = "img/logo_prospect.png"
 
+# Создание папок
 QR_DIR.mkdir(parents=True, exist_ok=True)
 CSS_DIR.mkdir(parents=True, exist_ok=True)
 IMG_DIR.mkdir(parents=True, exist_ok=True)
+ICONS_DST.mkdir(parents=True, exist_ok=True)
 
 # Копируем логотип
 shutil.copy(LOGO_SRC, IMG_DIR / LOGO_SRC.name)
 
-# Общий CSS
+# Копируем все SVG-иконки
+for icon in ["phone.svg", "whatsapp.svg", "vk.svg", "email.svg", "website.svg"]:
+    src = ICONS_SRC / icon
+    dst = ICONS_DST / icon
+    if src.exists():
+        shutil.copy(src, dst)
+    else:
+        print(f"Внимание: {src} не найден!")
+
+# CSS-стили
 style_css = """
 body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; margin:0; }
 .container { max-width:440px; margin:0 auto; padding:36px 12px 0 12px;}
 .logo { display:flex; justify-content:center; margin-bottom:34px;}
-.logo img { width:150px; max-width:80vw;}
+.logo img { width:300px; max-width:90vw;}
 .person-title { font-size:2em; font-weight:600; text-align:center; margin-bottom:28px;}
 .contacts-list { margin-top:36px;}
 .contact-block { display:flex; align-items:center; background:#1a1a1a; color:#fff; border-radius:14px; margin-bottom:22px; text-decoration:none; box-shadow:0 2px 10px #0004; min-height:64px; transition:box-shadow 0.2s;}
@@ -104,56 +116,56 @@ people_list = ""
 # Генерация персональных html и QR
 for p in people:
     blocks = ""
-    # WhatsApp
-    if p.get("whatsapp"):
-        for wa in p["whatsapp"]:
-            blocks += f"""
-    <a class="contact-block" href="https://wa.me/{wa}" target="_blank">
-      <span class="icon"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA"></span>
-      <span class="contact-content">
-        <div class="contact-title">WhatsApp</div>
-        <div class="contact-desc">+{wa}</div>
-      </span>
-    </a>"""
-    # Телефон
+    # --- Телефон ---
     if p.get("phones"):
         for phone in p["phones"]:
             blocks += f"""
     <a class="contact-block" href="tel:+{phone}">
-      <span class="icon">📞</span>
+      <span class="icon"><img src="icons/phone.svg" alt="Phone"></span>
       <span class="contact-content">
         <div class="contact-title">Телефон</div>
         <div class="contact-desc">+{phone}</div>
       </span>
     </a>"""
-    # Email
+    # --- WhatsApp ---
+    if p.get("whatsapp"):
+        for wa in p["whatsapp"]:
+            blocks += f"""
+    <a class="contact-block" href="https://wa.me/{wa}" target="_blank">
+      <span class="icon"><img src="icons/whatsapp.svg" alt="WhatsApp"></span>
+      <span class="contact-content">
+        <div class="contact-title">WhatsApp</div>
+        <div class="contact-desc">+{wa}</div>
+      </span>
+    </a>"""
+    # --- ВКонтакте ---
+    if p.get("vk"):
+        blocks += f"""
+    <a class="contact-block" href="{p['vk']}" target="_blank">
+      <span class="icon"><img src="icons/vk.svg" alt="VK"></span>
+      <span class="contact-content">
+        <div class="contact-title">ВКонтакте</div>
+        <div class="contact-desc">{p['vk'].replace('https://vk.com/','vk.com/')}</div>
+      </span>
+    </a>"""
+    # --- Email ---
     if p.get("email"):
         blocks += f"""
     <a class="contact-block" href="mailto:{p['email']}">
-      <span class="icon">✉️</span>
+      <span class="icon"><img src="icons/email.svg" alt="Email"></span>
       <span class="contact-content">
         <div class="contact-title">Email</div>
         <div class="contact-desc">{p['email']}</div>
       </span>
     </a>"""
-    # Сайт
+    # --- Сайт ---
     if p.get("site"):
         blocks += f"""
     <a class="contact-block" href="{p['site']}" target="_blank">
-      <span class="icon"><img src="https://www.prospectboxing.ru/favicon.ico" alt="Site"></span>
+      <span class="icon"><img src="icons/website.svg" alt="Site"></span>
       <span class="contact-content">
         <div class="contact-title">Сайт</div>
         <div class="contact-desc">{p['site'].replace('https://','')}</div>
-      </span>
-    </a>"""
-    # VK
-    if p.get("vk"):
-        blocks += f"""
-    <a class="contact-block" href="{p['vk']}" target="_blank">
-      <span class="icon"><img src="https://upload.wikimedia.org/wikipedia/commons/2/21/VK.com-logo.svg" alt="VK"></span>
-      <span class="contact-content">
-        <div class="contact-title">ВКонтакте</div>
-        <div class="contact-desc">{p['vk'].replace('https://vk.com/','vk.com/')}</div>
       </span>
     </a>"""
 
@@ -182,4 +194,4 @@ index_html = index_template.format(people=people_list)
 with open(OUTPUT / "index.html", "w", encoding="utf-8") as f:
     f.write(index_html)
 
-print("Готово! Персональные страницы, index и QR-коды сгенерированы.")
+print("Готово! Все страницы, QR-коды, стили и иконки скопированы и сгенерированы.")
