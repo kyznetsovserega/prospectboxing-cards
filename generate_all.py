@@ -10,8 +10,8 @@ OUTPUT = BASE / "docs"
 QR_DIR = OUTPUT / "qrcodes"
 CSS_DIR = OUTPUT / "css"
 IMG_DIR = OUTPUT / "img"
-LOGO_SRC = BASE / "ProspectBoxing2.png"
-LOGO = "img/ProspectBoxing2.png"
+LOGO_SRC = BASE / "logo_prospect.png"
+LOGO = "img/logo_prospect.png"
 
 QR_DIR.mkdir(parents=True, exist_ok=True)
 CSS_DIR.mkdir(parents=True, exist_ok=True)
@@ -88,7 +88,7 @@ index_template = """<!DOCTYPE html>
 </head>
 <body>
   <div class="container">
-    <div class="logo"><img src="img/ProspectBoxing2.png" alt="Prospect Boxing Logo"></div>
+    <div class="logo"><img src="img/logo_prospect.png" alt="Prospect Boxing Logo"></div>
     <h2 style="text-align:center; margin-bottom:24px;">Контакты Prospect Boxing</h2>
     <div class="person-list">
       {people}
