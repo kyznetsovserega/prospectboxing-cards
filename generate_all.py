@@ -13,15 +13,14 @@ IMG_DIR = OUTPUT / "img"
 LOGO_SRC = BASE / "ProspectBoxing2.png"
 LOGO = "img/ProspectBoxing2.png"
 
-# Создаём директории
 QR_DIR.mkdir(parents=True, exist_ok=True)
 CSS_DIR.mkdir(parents=True, exist_ok=True)
 IMG_DIR.mkdir(parents=True, exist_ok=True)
 
-# Копируем логотип (один раз)
+# Копируем логотип
 shutil.copy(LOGO_SRC, IMG_DIR / LOGO_SRC.name)
 
-# Генерируем style.css
+# Общий CSS
 style_css = """
 body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; margin:0; }
 .container { max-width:440px; margin:0 auto; padding:36px 12px 0 12px;}
@@ -36,11 +35,18 @@ body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; mar
 .contact-content { flex:1; min-width:0;}
 .contact-title { font-size:1.09em; font-weight:600; margin-bottom:2px;}
 .contact-desc { font-size:0.97em; opacity:0.77;}
+.qr-thumb { width:46px; height:46px; object-fit:contain; border-radius:10px; background:#fff; margin-right:18px; box-shadow:0 2px 6px #0002;}
+.person-list { margin-top:32px; }
+.person-item { display:flex; align-items:center; background:#181818; border-radius:12px; margin-bottom:16px; padding:10px 18px; box-shadow:0 2px 10px #0004; transition:box-shadow 0.2s; }
+.person-item:hover { box-shadow:0 4px 16px #0009; background:#232323;}
+.person-link { color:#fff; text-decoration:none; font-size:1.09em; font-weight:500;}
 @media (max-width: 500px) {
   .container {padding: 18px 2vw 2vw;}
   .logo img {width: 100px;}
   .icon {width:36px; height:36px; margin:0 8px;}
   .icon img {width:20px; height:20px;}
+  .qr-thumb {width:30px; height:30px; margin-right:10px;}
+  .person-item {padding:7px 6px;}
 }
 """
 with open(CSS_DIR / "style.css", "w", encoding="utf-8") as f:
@@ -57,7 +63,7 @@ html_template = """<!DOCTYPE html>
   <meta charset="UTF-8">
   <title>{name} — Prospect Boxing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="docs/css/style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <div class="container">
@@ -70,6 +76,30 @@ html_template = """<!DOCTYPE html>
 </body>
 </html>
 """
+
+# HTML шаблон для index
+index_template = """<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Контакты Prospect Boxing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="logo"><img src="img/ProspectBoxing2.png" alt="Prospect Boxing Logo"></div>
+    <h2 style="text-align:center; margin-bottom:24px;">Контакты Prospect Boxing</h2>
+    <div class="person-list">
+      {people}
+    </div>
+  </div>
+</body>
+</html>
+"""
+
+# Список людей с QR в index
+people_list = ""
 
 # Генерация персональных html и QR
 for p in people:
@@ -133,9 +163,23 @@ for p in people:
     with open(OUTPUT / page_name, "w", encoding='utf-8') as f:
         f.write(html_out)
 
-    # --- Генерируем QR (ссылку на файл, предполагается, что будет на GitHub Pages)
-    qr_url = f"https://kyznetsovserega.github.io/prospectboxing-cards/{page_name}"  # <-- подставь свой путь!
+    # --- Генерируем QR (ссылку на файл, для GitHub Pages)
+    qr_url = f"https://kyznetsovserega.github.io/prospectboxing-cards/{page_name}"
     qr_img = qrcode.make(qr_url)
-    qr_img.save(QR_DIR / f"qr_{p['id']}.png")
+    qr_path = QR_DIR / f"qr_{p['id']}.png"
+    qr_img.save(qr_path)
 
-print("Готово! Персональные страницы и QR-коды сгенерированы.")
+    # --- Добавляем в список для index
+    people_list += f"""
+    <div class="person-item">
+      <img class="qr-thumb" src="qrcodes/qr_{p['id']}.png" alt="QR {p['name']}">
+      <a class="person-link" href="person_{p['id']}.html">{p['name']}</a>
+    </div>
+    """
+
+# --- Генерируем index.html
+index_html = index_template.format(people=people_list)
+with open(OUTPUT / "index.html", "w", encoding="utf-8") as f:
+    f.write(index_html)
+
+print("Готово! Персональные страницы, index и QR-коды сгенерированы.")

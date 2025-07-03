@@ -12,9 +12,16 @@ body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; mar
 .contact-content { flex:1; min-width:0;}
 .contact-title { font-size:1.09em; font-weight:600; margin-bottom:2px;}
 .contact-desc { font-size:0.97em; opacity:0.77;}
+.qr-thumb { width:46px; height:46px; object-fit:contain; border-radius:10px; background:#fff; margin-right:18px; box-shadow:0 2px 6px #0002;}
+.person-list { margin-top:32px; }
+.person-item { display:flex; align-items:center; background:#181818; border-radius:12px; margin-bottom:16px; padding:10px 18px; box-shadow:0 2px 10px #0004; transition:box-shadow 0.2s; }
+.person-item:hover { box-shadow:0 4px 16px #0009; background:#232323;}
+.person-link { color:#fff; text-decoration:none; font-size:1.09em; font-weight:500;}
 @media (max-width: 500px) {
   .container {padding: 18px 2vw 2vw;}
   .logo img {width: 100px;}
   .icon {width:36px; height:36px; margin:0 8px;}
   .icon img {width:20px; height:20px;}
+  .qr-thumb {width:30px; height:30px; margin-right:10px;}
+  .person-item {padding:7px 6px;}
 }
