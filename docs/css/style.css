@@ -40,8 +40,8 @@ body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; mar
   display:block;
 }
 /* --- VK и WhatsApp во весь квадрат --- */
-.icon img[src*="whatsapp"], .icon svg.whatsapp,
-.icon img[src*="vk"], .icon svg.vk {
+.icon.whatsapp img, .icon.whatsapp svg,
+.icon.vk img, .icon.vk svg {
   width:54px; height:54px; max-width:54px; max-height:54px;
 }
 /* --- Цветные фоны для популярных иконок --- */
@@ -75,9 +75,9 @@ body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; mar
   .logo img {width: 150px;}
   .icon {width:36px; height:36px; margin:0 8px;}
   .icon img, .icon svg {width:13px; height:13px;}
-  .icon img[src*="whatsapp"], .icon svg.whatsapp,
-  .icon img[src*="vk"], .icon svg.vk {
-    width:36px; height:36px;
+  .icon.whatsapp img, .icon.whatsapp svg,
+  .icon.vk img, .icon.vk svg {
+    width:36px; height:36px; max-width:36px; max-height:36px;
   }
   .qr-thumb {width:30px; height:30px; margin-right:10px;}
   .person-item {padding:7px 6px;}
