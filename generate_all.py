@@ -1,4 +1,5 @@
 import qrcode
+from qrcode.image.svg import SvgImage  # для SVG QR
 import json
 from pathlib import Path
 import shutil
@@ -27,6 +28,12 @@ if preview_global_src.exists():
 
 # Копируем логотип в docs/img
 shutil.copy(LOGO_SRC, IMG_DIR / LOGO_SRC.name)
+
+# Копируем favicon.ico (если есть) в docs
+FAVICON_SRC = BASE / "favicon.ico"
+FAVICON_DST = OUTPUT / "favicon.ico"
+if FAVICON_SRC.exists():
+    shutil.copy(FAVICON_SRC, FAVICON_DST)
 
 # Копируем все SVG-иконки (если есть)
 icon_files = {
@@ -147,6 +154,7 @@ html_template = """<!DOCTYPE html>
   <title>{name} — Prospect Boxing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
   <div class="container">
@@ -167,6 +175,7 @@ index_template = """<!DOCTYPE html>
   <title>Контакты Prospect Boxing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
   <div class="container">
@@ -256,16 +265,16 @@ for p in people:
     with open(OUTPUT / page_name, "w", encoding='utf-8') as f:
         f.write(html_out)
 
-    # --- Генерируем QR (GitHub Pages)
+    # --- Генерируем QR (GitHub Pages) --- SVG!
     qr_url = f"https://kyznetsovserega.github.io/prospectboxing-cards/{page_name}"
-    qr_img = qrcode.make(qr_url)
-    qr_path = QR_DIR / f"qr_{p['id']}.png"
+    qr_img = qrcode.make(qr_url, image_factory=SvgImage)
+    qr_path = QR_DIR / f"qr_{p['id']}.svg"
     qr_img.save(qr_path)
 
     # --- Для index
     people_list += f"""
     <div class="person-item">
-      <img class="qr-thumb" src="qrcodes/qr_{p['id']}.png" alt="QR {p['name']}">
+      <img class="qr-thumb" src="qrcodes/qr_{p['id']}.svg" alt="QR {p['name']}">
       <a class="person-link" href="person_{p['id']}.html">{p['name']}</a>
     </div>
     """
@@ -275,4 +284,4 @@ index_html = index_template.format(people=people_list)
 with open(OUTPUT / "index.html", "w", encoding="utf-8") as f:
     f.write(index_html)
 
-print("Готово! Все страницы, QR-коды, стили, превью и иконки скопированы и сгенерированы.")
+print("Готово! Все страницы, QR-коды, стили, фавикон, превью и иконки скопированы и сгенерированы.")
