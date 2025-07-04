@@ -31,7 +31,7 @@ shutil.copy(LOGO_SRC, IMG_DIR / LOGO_SRC.name)
 # Копируем все SVG-иконки (если есть)
 icon_files = {
     "phone": "phone.svg",
-    "whatsapp": "whatsapp.png",
+    "whatsapp": "whatsapp.svg",
     "vk": "vk.svg",
     "email": "email.svg",
     "website": "website.svg"
@@ -77,15 +77,21 @@ body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; mar
   font-size:2em;
   padding: 0;
 }
+/* --- Телефон и email по умолчанию: 2/3 квадрата --- */
 .icon img, .icon svg {
-  width:100%;
-  height:100%;
+  width:36px;
+  height:36px;
   max-width:100%;
   max-height:100%;
   object-fit:contain;
   display:block;
 }
-/* Индивидуальные цвета для популярных иконок (можно убрать, если нужны все серые) */
+/* --- VK и WhatsApp во весь квадрат --- */
+.icon img[src*="whatsapp"], .icon svg.whatsapp,
+.icon img[src*="vk"], .icon svg.vk {
+  width:54px; height:54px; max-width:54px; max-height:54px;
+}
+/* --- Цветные фоны для популярных иконок --- */
 .icon.whatsapp { background: #25D366 !important; }
 .icon.vk { background: #0077FF !important; }
 
@@ -115,7 +121,11 @@ body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; mar
   .container {padding: 18px 2vw 2vw;}
   .logo img {width: 150px;}
   .icon {width:36px; height:36px; margin:0 8px;}
-  .icon img, .icon svg {width:100%; height:100%;}
+  .icon img, .icon svg {width:24px; height:24px;}
+  .icon img[src*="whatsapp"], .icon svg.whatsapp,
+  .icon img[src*="vk"], .icon svg.vk {
+    width:36px; height:36px;
+  }
   .qr-thumb {width:30px; height:30px; margin-right:10px;}
   .person-item {padding:7px 6px;}
   .site-preview-img {width:36px; height:36px;}
@@ -190,7 +200,7 @@ for p in people:
         for wa in p["whatsapp"]:
             blocks += f"""
     <a class="contact-block" href="https://wa.me/{wa}" target="_blank">
-      <span class="icon"><img src="icons/whatsapp.png" alt="WhatsApp"></span>
+      <span class="icon whatsapp"><img src="icons/whatsapp.png" alt="WhatsApp"></span>
       <span class="contact-content">
         <div class="contact-title">WhatsApp</div>
         <div class="contact-desc">+{wa}</div>
@@ -200,7 +210,7 @@ for p in people:
     if p.get("vk"):
         blocks += f"""
     <a class="contact-block" href="{p['vk']}" target="_blank">
-      <span class="icon"><img src="icons/vk.svg" alt="VK"></span>
+      <span class="icon vk"><img src="icons/vk.svg" alt="VK"></span>
       <span class="contact-content">
         <div class="contact-title">ВКонтакте</div>
         <div class="contact-desc">{p['vk'].replace('https://vk.com/','vk.com/')}</div>
