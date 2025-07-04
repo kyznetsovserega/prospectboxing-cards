@@ -31,7 +31,7 @@ shutil.copy(LOGO_SRC, IMG_DIR / LOGO_SRC.name)
 # Копируем все SVG-иконки (если есть)
 icon_files = {
     "phone": "phone.svg",
-    "whatsapp": "whatsapp.svg",
+    "whatsapp": "whatsapp.png",
     "vk": "vk.svg",
     "email": "email.svg",
     "website": "website.svg"
@@ -77,10 +77,10 @@ body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; mar
   font-size:2em;
   padding: 0;
 }
-/* --- Телефон и email по умолчанию: 2/3 квадрата --- */
+/* --- Телефон и email: 1/2 квадрата --- */
 .icon img, .icon svg {
-  width:36px;
-  height:36px;
+  width:27px;
+  height:27px;
   max-width:100%;
   max-height:100%;
   object-fit:contain;
@@ -121,7 +121,7 @@ body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; mar
   .container {padding: 18px 2vw 2vw;}
   .logo img {width: 150px;}
   .icon {width:36px; height:36px; margin:0 8px;}
-  .icon img, .icon svg {width:24px; height:24px;}
+  .icon img, .icon svg {width:13px; height:13px;}
   .icon img[src*="whatsapp"], .icon svg.whatsapp,
   .icon img[src*="vk"], .icon svg.vk {
     width:36px; height:36px;
