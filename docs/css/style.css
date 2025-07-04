@@ -74,7 +74,7 @@ body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; mar
   .container {padding: 18px 2vw 2vw;}
   .logo img {width: 150px;}
   .icon {width:36px; height:36px; margin:0 8px;}
-  .icon img, .icon svg {width:13px; height:13px;}
+  .icon img, .icon svg {width:20px; height:20px;}
   .icon.whatsapp img, .icon.whatsapp svg,
   .icon.vk img, .icon.vk svg {
     width:36px; height:36px; max-width:36px; max-height:36px;
