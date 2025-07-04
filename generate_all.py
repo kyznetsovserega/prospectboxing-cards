@@ -20,30 +20,50 @@ CSS_DIR.mkdir(parents=True, exist_ok=True)
 IMG_DIR.mkdir(parents=True, exist_ok=True)
 ICONS_DST.mkdir(parents=True, exist_ok=True)
 
-# Копируем логотип
+# Копируем preview_website.jpg если он есть в корне
+preview_global_src = BASE / "preview_website.jpg"
+if preview_global_src.exists():
+    shutil.copy(preview_global_src, IMG_DIR / "preview_website.jpg")
+
+# Копируем логотип в docs/img
 shutil.copy(LOGO_SRC, IMG_DIR / LOGO_SRC.name)
 
-# Копируем все SVG-иконки
-for icon in ["phone.svg", "whatsapp.svg", "vk.svg", "email.svg", "website.svg"]:
-    src = ICONS_SRC / icon
-    dst = ICONS_DST / icon
+# Копируем все SVG-иконки (если есть)
+icon_files = {
+    "phone": "phone.svg",
+    "whatsapp": "whatsapp.png",
+    "vk": "vk.svg",
+    "email": "email.svg",
+    "website": "website.svg"
+}
+for icon_name, icon_file in icon_files.items():
+    src = ICONS_SRC / icon_file
+    dst = ICONS_DST / icon_file
     if src.exists():
         shutil.copy(src, dst)
     else:
         print(f"Внимание: {src} не найден!")
 
-# CSS-стили
+# --- CSS ---
 style_css = """
 body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; margin:0; }
 .container { max-width:440px; margin:0 auto; padding:36px 12px 0 12px;}
-.logo { display:flex; justify-content:center; margin-bottom:34px;}
+.logo { display:flex; justify-content:center; }
 .logo img { width:300px; max-width:90vw;}
 .person-title { font-size:2em; font-weight:600; text-align:center; margin-bottom:28px;}
 .contacts-list { margin-top:36px;}
 .contact-block { display:flex; align-items:center; background:#1a1a1a; color:#fff; border-radius:14px; margin-bottom:22px; text-decoration:none; box-shadow:0 2px 10px #0004; min-height:64px; transition:box-shadow 0.2s;}
 .contact-block:hover { box-shadow:0 4px 16px #0009; background:#232323;}
 .icon { width:54px; height:54px; margin:0 16px; border-radius:10px; background:#333; display:flex; align-items:center; justify-content:center; font-size:2em;}
-.icon img { width:32px; height:32px; object-fit:contain;}
+.icon img, .site-preview { width:32px; height:32px; object-fit:contain;}
+.icon img[src*="whatsapp"]{width: 52px;height: 52px;}
+.icon img[src*="vk"] {width: 70px;height: 70px;}
+.site-preview-block {display:flex;align-items:center;gap:16px; background:#1a1a1a; border-radius:14px; margin-bottom:22px; min-height:64px; box-shadow:0 2px 10px #0004;}
+.site-preview-block:hover { box-shadow:0 4px 16px #0009; background:#232323;}
+.site-preview-img {width:54px; height:54px; object-fit:cover; border-radius:10px; margin-left:16px;}
+.site-preview-content {padding:8px 0;}
+.site-preview-title {font-weight:600; font-size:1.09em;}
+.site-preview-desc {opacity:0.77; font-size:0.95em;}
 .contact-content { flex:1; min-width:0;}
 .contact-title { font-size:1.09em; font-weight:600; margin-bottom:2px;}
 .contact-desc { font-size:0.97em; opacity:0.77;}
@@ -52,23 +72,32 @@ body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; mar
 .person-item { display:flex; align-items:center; background:#181818; border-radius:12px; margin-bottom:16px; padding:10px 18px; box-shadow:0 2px 10px #0004; transition:box-shadow 0.2s; }
 .person-item:hover { box-shadow:0 4px 16px #0009; background:#232323;}
 .person-link { color:#fff; text-decoration:none; font-size:1.09em; font-weight:500;}
+/* --- Правим visited/underline для кнопок --- */
+.contact-block, .contact-block:visited,
+.site-preview-block, .site-preview-block:visited,
+.contact-block *, .contact-block:visited *,
+.site-preview-block *, .site-preview-block:visited * {
+  color: #fff !important;
+  text-decoration: none !important;
+}
 @media (max-width: 500px) {
   .container {padding: 18px 2vw 2vw;}
-  .logo img {width: 100px;}
+  .logo img {width: 150px;}
   .icon {width:36px; height:36px; margin:0 8px;}
-  .icon img {width:20px; height:20px;}
+  .icon img, .site-preview {width:20px; height:20px;}
   .qr-thumb {width:30px; height:30px; margin-right:10px;}
   .person-item {padding:7px 6px;}
+  .site-preview-img {width:36px; height:36px;}
 }
 """
 with open(CSS_DIR / "style.css", "w", encoding="utf-8") as f:
     f.write(style_css)
 
-# Загружаем контакты
+# --- Загрузка контактов ---
 with open(BASE / "contacts.json", encoding="utf-8") as f:
     people = json.load(f)
 
-# HTML шаблон для личной страницы
+# --- HTML шаблоны ---
 html_template = """<!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -89,7 +118,6 @@ html_template = """<!DOCTYPE html>
 </html>
 """
 
-# HTML шаблон для index
 index_template = """<!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -110,10 +138,8 @@ index_template = """<!DOCTYPE html>
 </html>
 """
 
-# Список людей с QR в index
+# --- Генерация персональных страниц и QR ---
 people_list = ""
-
-# Генерация персональных html и QR
 for p in people:
     blocks = ""
     # --- Телефон ---
@@ -132,7 +158,7 @@ for p in people:
         for wa in p["whatsapp"]:
             blocks += f"""
     <a class="contact-block" href="https://wa.me/{wa}" target="_blank">
-      <span class="icon"><img src="icons/whatsapp.svg" alt="WhatsApp"></span>
+      <span class="icon"><img src="icons/whatsapp.png" alt="WhatsApp"></span>
       <span class="contact-content">
         <div class="contact-title">WhatsApp</div>
         <div class="contact-desc">+{wa}</div>
@@ -158,14 +184,27 @@ for p in people:
         <div class="contact-desc">{p['email']}</div>
       </span>
     </a>"""
-    # --- Сайт ---
-    if p.get("site"):
-        blocks += f"""
-    <a class="contact-block" href="{p['site']}" target="_blank">
+    # --- Сайт (preview_website.jpg или иконка, стиль всегда белый) ---
+    site_url = str(p.get("site", "")).strip()
+    if site_url:
+        site_domain = site_url.replace('https://', '').replace('http://', '').replace('/', '')
+        preview_jpg_global = IMG_DIR / "preview_website.jpg"
+        if preview_jpg_global.exists():
+            blocks += f"""
+    <a class="site-preview-block" href="{site_url}" target="_blank">
+      <img class="site-preview-img" src="img/preview_website.jpg" alt="Preview">
+      <div class="site-preview-content">
+        <div class="site-preview-title">Сайт</div>
+        <div class="site-preview-desc">{site_domain}</div>
+      </div>
+    </a>"""
+        else:
+            blocks += f"""
+    <a class="contact-block" href="{site_url}" target="_blank">
       <span class="icon"><img src="icons/website.svg" alt="Site"></span>
       <span class="contact-content">
         <div class="contact-title">Сайт</div>
-        <div class="contact-desc">{p['site'].replace('https://','')}</div>
+        <div class="contact-desc">{site_domain}</div>
       </span>
     </a>"""
 
@@ -175,13 +214,13 @@ for p in people:
     with open(OUTPUT / page_name, "w", encoding='utf-8') as f:
         f.write(html_out)
 
-    # --- Генерируем QR (ссылку на файл, для GitHub Pages)
+    # --- Генерируем QR (GitHub Pages)
     qr_url = f"https://kyznetsovserega.github.io/prospectboxing-cards/{page_name}"
     qr_img = qrcode.make(qr_url)
     qr_path = QR_DIR / f"qr_{p['id']}.png"
     qr_img.save(qr_path)
 
-    # --- Добавляем в список для index
+    # --- Для index
     people_list += f"""
     <div class="person-item">
       <img class="qr-thumb" src="qrcodes/qr_{p['id']}.png" alt="QR {p['name']}">
@@ -194,4 +233,4 @@ index_html = index_template.format(people=people_list)
 with open(OUTPUT / "index.html", "w", encoding="utf-8") as f:
     f.write(index_html)
 
-print("Готово! Все страницы, QR-коды, стили и иконки скопированы и сгенерированы.")
+print("Готово! Все страницы, QR-коды, стили, превью и иконки скопированы и сгенерированы.")

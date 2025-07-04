@@ -1,14 +1,22 @@
 
 body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; margin:0; }
 .container { max-width:440px; margin:0 auto; padding:36px 12px 0 12px;}
-.logo { display:flex; justify-content:center; margin-bottom:34px;}
+.logo { display:flex; justify-content:center; }
 .logo img { width:300px; max-width:90vw;}
 .person-title { font-size:2em; font-weight:600; text-align:center; margin-bottom:28px;}
 .contacts-list { margin-top:36px;}
 .contact-block { display:flex; align-items:center; background:#1a1a1a; color:#fff; border-radius:14px; margin-bottom:22px; text-decoration:none; box-shadow:0 2px 10px #0004; min-height:64px; transition:box-shadow 0.2s;}
 .contact-block:hover { box-shadow:0 4px 16px #0009; background:#232323;}
 .icon { width:54px; height:54px; margin:0 16px; border-radius:10px; background:#333; display:flex; align-items:center; justify-content:center; font-size:2em;}
-.icon img { width:32px; height:32px; object-fit:contain;}
+.icon img, .site-preview { width:32px; height:32px; object-fit:contain;}
+.icon img[src*="whatsapp"]{width: 52px;height: 52px;}
+.icon img[src*="vk"] {width: 70px;height: 70px;}
+.site-preview-block {display:flex;align-items:center;gap:16px; background:#1a1a1a; border-radius:14px; margin-bottom:22px; min-height:64px; box-shadow:0 2px 10px #0004;}
+.site-preview-block:hover { box-shadow:0 4px 16px #0009; background:#232323;}
+.site-preview-img {width:54px; height:54px; object-fit:cover; border-radius:10px; margin-left:16px;}
+.site-preview-content {padding:8px 0;}
+.site-preview-title {font-weight:600; font-size:1.09em;}
+.site-preview-desc {opacity:0.77; font-size:0.95em;}
 .contact-content { flex:1; min-width:0;}
 .contact-title { font-size:1.09em; font-weight:600; margin-bottom:2px;}
 .contact-desc { font-size:0.97em; opacity:0.77;}
@@ -17,11 +25,20 @@ body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; mar
 .person-item { display:flex; align-items:center; background:#181818; border-radius:12px; margin-bottom:16px; padding:10px 18px; box-shadow:0 2px 10px #0004; transition:box-shadow 0.2s; }
 .person-item:hover { box-shadow:0 4px 16px #0009; background:#232323;}
 .person-link { color:#fff; text-decoration:none; font-size:1.09em; font-weight:500;}
+/* --- Правим visited/underline для кнопок --- */
+.contact-block, .contact-block:visited,
+.site-preview-block, .site-preview-block:visited,
+.contact-block *, .contact-block:visited *,
+.site-preview-block *, .site-preview-block:visited * {
+  color: #fff !important;
+  text-decoration: none !important;
+}
 @media (max-width: 500px) {
   .container {padding: 18px 2vw 2vw;}
-  .logo img {width: 100px;}
+  .logo img {width: 150px;}
   .icon {width:36px; height:36px; margin:0 8px;}
-  .icon img {width:20px; height:20px;}
+  .icon img, .site-preview {width:20px; height:20px;}
   .qr-thumb {width:30px; height:30px; margin-right:10px;}
   .person-item {padding:7px 6px;}
+  .site-preview-img {width:36px; height:36px;}
 }
