@@ -84,7 +84,7 @@ body { background:#111; color:#fff; font-family:'Segoe UI',Arial,sans-serif; mar
   .container {padding: 18px 2vw 2vw;}
   .logo img {width: 150px;}
   .icon {width:36px; height:36px; margin:0 8px;}
-  .icon img, .site-preview {width:20px; height:20px;}
+  .icon img, .icon svg {width:26px; height:26px;}
   .qr-thumb {width:30px; height:30px; margin-right:10px;}
   .person-item {padding:7px 6px;}
   .site-preview-img {width:36px; height:36px;}
