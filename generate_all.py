@@ -1,5 +1,5 @@
 import qrcode
-from qrcode.image.svg import SvgImage  # для SVG QR
+from qrcode.image.svg import SvgImage  # SVG QR
 import json
 from pathlib import Path
 import shutil
@@ -35,10 +35,10 @@ FAVICON_DST = OUTPUT / "favicon.ico"
 if FAVICON_SRC.exists():
     shutil.copy(FAVICON_SRC, FAVICON_DST)
 
-# Копируем все SVG-иконки (если есть)
+# Копируем все SVG-иконки
 icon_files = {
     "phone": "phone.svg",
-    "whatsapp": "whatsapp.png",
+    "whatsapp": "whatsapp.svg",
     "vk": "vk.svg",
     "email": "email.svg",
     "website": "website.svg"
@@ -193,7 +193,7 @@ index_template = """<!DOCTYPE html>
 people_list = ""
 for p in people:
     blocks = ""
-    # --- Телефон ---
+    # 1. Телефон
     if p.get("phones"):
         for phone in p["phones"]:
             blocks += f"""
@@ -204,38 +204,18 @@ for p in people:
         <div class="contact-desc">+{phone}</div>
       </span>
     </a>"""
-    # --- WhatsApp ---
+    # 2. WhatsApp
     if p.get("whatsapp"):
         for wa in p["whatsapp"]:
             blocks += f"""
     <a class="contact-block" href="https://wa.me/{wa}" target="_blank">
-      <span class="icon whatsapp"><img src="icons/whatsapp.png" alt="WhatsApp"></span>
+      <span class="icon whatsapp"><img src="icons/whatsapp.svg" alt="WhatsApp"></span>
       <span class="contact-content">
         <div class="contact-title">WhatsApp</div>
         <div class="contact-desc">+{wa}</div>
       </span>
     </a>"""
-    # --- ВКонтакте ---
-    if p.get("vk"):
-        blocks += f"""
-    <a class="contact-block" href="{p['vk']}" target="_blank">
-      <span class="icon vk"><img src="icons/vk.svg" alt="VK"></span>
-      <span class="contact-content">
-        <div class="contact-title">ВКонтакте</div>
-        <div class="contact-desc">{p['vk'].replace('https://vk.com/','vk.com/')}</div>
-      </span>
-    </a>"""
-    # --- Email ---
-    if p.get("email"):
-        blocks += f"""
-    <a class="contact-block" href="mailto:{p['email']}">
-      <span class="icon"><img src="icons/email.svg" alt="Email"></span>
-      <span class="contact-content">
-        <div class="contact-title">Email</div>
-        <div class="contact-desc">{p['email']}</div>
-      </span>
-    </a>"""
-    # --- Сайт (preview_website.jpg или иконка, стиль всегда белый) ---
+    # 3. Сайт
     site_url = str(p.get("site", "")).strip()
     if site_url:
         site_domain = site_url.replace('https://', '').replace('http://', '').replace('/', '')
@@ -256,6 +236,26 @@ for p in people:
       <span class="contact-content">
         <div class="contact-title">Сайт</div>
         <div class="contact-desc">{site_domain}</div>
+      </span>
+    </a>"""
+    # 4. ВКонтакте
+    if p.get("vk"):
+        blocks += f"""
+    <a class="contact-block" href="{p['vk']}" target="_blank">
+      <span class="icon vk"><img src="icons/vk.svg" alt="VK"></span>
+      <span class="contact-content">
+        <div class="contact-title">ВКонтакте</div>
+        <div class="contact-desc">{p['vk'].replace('https://vk.com/','vk.com/')}</div>
+      </span>
+    </a>"""
+    # 5. Email
+    if p.get("email"):
+        blocks += f"""
+    <a class="contact-block" href="mailto:{p['email']}">
+      <span class="icon"><img src="icons/email.svg" alt="Email"></span>
+      <span class="contact-content">
+        <div class="contact-title">Email</div>
+        <div class="contact-desc">{p['email']}</div>
       </span>
     </a>"""
 
