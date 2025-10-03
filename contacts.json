@@ -1,55 +1,10 @@
 [
   {
-    "id": "prospect_boxing",
-    "name": "Prospect boxing",
-    "phones": ["79647269491"],
-    "whatsapp": ["79189755618"],
-    "email": "info@prospectboxing.ru",
-    "site": "https://www.prospectboxing.ru",
-    "vk": "https://vk.com/prospectboxing"
-  },
-  {
-    "id": "tolokontsev_stepan",
-    "name": "Толоконцев Степан",
-    "phones": ["79385338777"],
-    "whatsapp": ["79385338777"],
-    "email": "stepan.t@prospectboxing.ru",
-    "site": "https://www.prospectboxing.ru",
-    "vk": "https://vk.com/prospectboxing"
-  },
-  {
-    "id": "smolnikova_anna",
-    "name": "Смольникова Анна",
-    "phones": ["79054742862"],
-    "whatsapp": ["79054742862"],
-    "email": "anna.s@prospectboxing.ru",
-    "site": "https://www.prospectboxing.ru",
-    "vk": "https://vk.com/prospectboxing"
-  },
-  {
-    "id": "fedosov_anatoliy",
-    "name": "Федосов Анатолий",
+    "id": "andrey_rastigin",
+    "name": "Растегин Андрей",
     "phones": ["79054742896"],
     "whatsapp": ["79054742896"],
-    "email": "anatoly.f@prospectboxing.ru",
-    "site": "https://www.prospectboxing.ru",
-    "vk": "https://vk.com/prospectboxing"
-  },
-  {
-    "id": "chechev_ilya",
-    "name": "Чечев Илья",
-    "phones": ["79024077717"],
-    "whatsapp": ["79024077717"],
-    "email": "info@prospectboxing.ru",
-    "site": "https://www.prospectboxing.ru",
-    "vk": "https://vk.com/prospectboxing"
-  },
-  {
-    "id": "roman_ishkov",
-    "name": "Роман Ишков",
-    "phones": ["79882433783"],
-    "whatsapp": ["79882433783"],
-    "email": "info@prospectboxing.ru",
+    "email": "andrey.r@prospectboxing",
     "site": "https://www.prospectboxing.ru",
     "vk": "https://vk.com/prospectboxing"
   }
